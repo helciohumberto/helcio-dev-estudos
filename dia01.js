@@ -13,10 +13,19 @@ async function buscarDados(){
         });
 
         console.log(dados)
-        
+
     } catch (error) {
         console.error(error)
     }
 }
 
 buscarDados()
+
+
+// ---------------------------------------------------------------
+
+// Cap 1. JavaScript Eloquent
+
+for(let i=1; i <= 7; i++){
+    console.log("#".repeat(i))
+}
