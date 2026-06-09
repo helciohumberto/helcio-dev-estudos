@@ -1,0 +1,31 @@
+{
+  "name": "helcio-dev-estudos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dia01.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/helciohumberto/helcio-dev-estudos.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/helciohumberto/helcio-dev-estudos/issues"
+  },
+  "homepage": "https://github.com/helciohumberto/helcio-dev-estudos#readme",
+  "devDependencies": {
+    "@types/node": "^25.9.2",
+    "@types/node-fetch": "^2.6.13",
+    "npx": "^10.2.2",
+    "ts-node": "^10.9.2",
+    "tsc": "^2.0.4",
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}
