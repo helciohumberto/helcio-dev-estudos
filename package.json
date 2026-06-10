@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/helciohumberto/helcio-dev-estudos#readme",
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "^25.9.2",
     "@types/node-fetch": "^2.6.13",
     "npx": "^10.2.2",
@@ -26,6 +27,7 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
+    "express": "^5.2.1",
     "node-fetch": "^3.3.2"
   }
 }
