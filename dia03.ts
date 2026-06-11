@@ -1,6 +1,11 @@
 import express from "express";
 const app = express();
 
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next()
+});
+
 app.get("/", (req, res) => {
     res.send("Funcionando");
 });
@@ -13,8 +18,13 @@ async function fetchData<T>(url: string): Promise<T> {
 }
 
 app.get("/crypto/btc", async (req, res) => {
-    res.json(await fetchData("https://api.coingecko.com/api/v3/simple/price?vs_currencies=usd&ids=bitcoin"))
-});
+    try {
+        const dados = await fetchData("https://api.coingecko.com/api/v3/simple/price?vs_currencies=usd&ids=bitcoin")
+        res.json(dados)
+    } catch (error) {
+        res.status(500).json({ erro: "Erro ao buscar dados" })
+    }
+})
 
 interface portfolio {
     nomeDaMoeda: string,
@@ -33,7 +43,11 @@ const meuPortfolio: portfolio = {
 }
 
 app.get("/portfolio", async(req, res) => {
-    res.json(await meuPortfolio)
+    try {
+        res.json(await meuPortfolio)
+    } catch (error) {
+        res.status(500).json({ erro: "Erro ao buscar Portfolio"})
+    }
 });
 
 app.listen(3000, ()=> {
