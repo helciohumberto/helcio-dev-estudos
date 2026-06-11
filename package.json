@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/helciohumberto/helcio-dev-estudos#readme",
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.9.2",
     "@types/node-fetch": "^2.6.13",
     "npx": "^10.2.2",
@@ -27,7 +29,9 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "node-fetch": "^3.3.2"
   }
 }
