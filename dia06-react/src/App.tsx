@@ -1,17 +1,16 @@
-import { useState, useEffect } from 'react'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./Login";
+import Dashboard from "./Dashboard";
+
 function App() {
-  const [preco, setPreco] = useState<number | null>(null)
-  useEffect(() => {
-    fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd')
-      .then(response => response.json())
-      .then(data => setPreco(data.bitcoin.usd))
-  }, [])
-return (
-    <div>
-      <h1>Preço do BTC</h1>
-      <p>{preco ? `$${preco}` : "A carregar..."}</p>
-    </div>
-)
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
