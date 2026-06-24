@@ -2,6 +2,16 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import cors from "cors"
+import {Request, Response, NextFunction} from "express"
+
+declare global {
+  namespace Express {
+    interface Request {
+      utilizador?: any
+    }
+  }
+}
+
 const app = express();
 
 app.use(cors())
@@ -11,6 +21,10 @@ app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
 });
+
+function erroCredenciaisInvalidas(res: Response) {
+    return res.status(401).json({ erro: "Credenciais inválidas" });
+}
 
 interface Utilizador {
   email: string;
@@ -36,15 +50,13 @@ app.post("/auth", async (req, res) => {
   const utilizador = utilizadores.find((u) => u.email === email);
 
   if (!utilizador) {
-    res.status(401).json({ erro: "Credenciais inválidas" });
-    return;
+        return erroCredenciaisInvalidas(res);
   }
 
   const passwordValida = await bcrypt.compare(password, utilizador.password);
 
   if (!passwordValida) {
-    res.status(401).json({ erro: "Credenciais inválidas" });
-    return;
+        return erroCredenciaisInvalidas(res);
   }
 
   const token = jwt.sign({ email: utilizador.email }, "segredo123", {
@@ -54,12 +66,11 @@ app.post("/auth", async (req, res) => {
   res.json({ token });
 });
 
-function autenticar(req: any, res: any, next: any) {
+function autenticar(req: Request, res: Response, next: NextFunction) {
     const token = req.headers.authorization?.split(" ")[1]
 
     if (!token) {
-        res.status(401).json({ erro: "Token não fornecido" })
-        return
+      return erroCredenciaisInvalidas(res);
     }
 
     try {
