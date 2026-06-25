@@ -7,7 +7,7 @@ function Login() {
 
   const navigate = useNavigate();
 
-  async function handleLogin() {
+  async function fazerLogin(email: string, senha: string) {
     const resposta = await fetch("http://localhost:3000/auth", {
       method: "POST",
       headers: {
@@ -15,10 +15,13 @@ function Login() {
       },
       body: JSON.stringify({ email, password: senha }),
     });
-
     const dados = await resposta.json();
-    console.log(dados);
+    return dados;
+  }
 
+  async function handleLogin() {
+    const dados = await fazerLogin(email, senha)
+    console.log(dados);
     localStorage.setItem("token", dados.token);
     navigate("/dashboard");
   }
