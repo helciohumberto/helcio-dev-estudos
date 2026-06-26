@@ -2,8 +2,9 @@
   "name": "helcio-dev-estudos",
   "version": "1.0.0",
   "description": "",
-  "main": "dia01.js",
+  "main": "dia04.js",
   "scripts": {
+    "start": "ts-node dia04.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -25,9 +26,8 @@
     "@types/node": "^25.9.2",
     "@types/node-fetch": "^2.6.13",
     "npx": "^10.2.2",
-    "ts-node": "^10.9.2",
-    "tsc": "^2.0.4",
-    "typescript": "^6.0.3"
+    
+    "tsc": "^2.0.4"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -36,6 +36,8 @@
     "dotenv-safe": "^9.1.0",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
   }
 }
