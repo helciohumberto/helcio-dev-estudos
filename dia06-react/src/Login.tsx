@@ -8,7 +8,7 @@ function Login() {
   const navigate = useNavigate();
 
   async function fazerLogin(email: string, senha: string) {
-    const resposta = await fetch("http://localhost:3000/auth", {
+    const resposta = await fetch("https://helcio-dev-estudos-production.up.railway.app/auth", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -19,12 +19,18 @@ function Login() {
     return dados;
   }
 
-  async function handleLogin() {
+async function handleLogin() {
     const dados = await fazerLogin(email, senha)
     console.log(dados);
+
+    if (!dados.token) {
+        alert("Email ou senha incorretos")
+        return
+    }
+
     localStorage.setItem("token", dados.token);
     navigate("/dashboard");
-  }
+}
 
   return (
     <div>
