@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plano 60 Dias TDAH</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,wght@0,300;0,600;1,300;1,600&display=swap');
+:root {
+  --bg:#faf8f4;--bg2:#f2ede4;--surface:#fff;--border:#e2ddd5;--border2:#ccc7bc;
+  --text:#1a1917;--muted:#8a847a;--muted2:#b5b0a8;
+  --accent:#d4521a;--accent2:#2563a8;--accent3:#1a8a4a;--yellow:#f5a623;
+  --p1:#d4521a;--p2:#2563a8;--p3:#1a8a4a;--tag:#f0ece5;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;}
+.topbar{background:var(--text);color:var(--bg);padding:.5rem 2rem;display:flex;align-items:center;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.7rem;position:sticky;top:0;z-index:100;}
+.prog-bar{width:100px;height:4px;background:#444;border-radius:2px;overflow:hidden;display:inline-block;vertical-align:middle;margin:0 .5rem;}
+.prog-fill{height:100%;background:var(--yellow);transition:width .4s;width:0%;}
+.prog-pct{color:var(--yellow);font-weight:600;}
+.layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 36px);}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:1rem 0;position:sticky;top:36px;height:calc(100vh - 36px);overflow-y:auto;}
+.sidebar-title{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 1.2rem;margin-bottom:.8rem;}
+.phase-group-label{display:flex;align-items:center;gap:.4rem;padding:.4rem 1.2rem;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);cursor:pointer;}
+.pdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.p1d{background:var(--p1);}.p2d{background:var(--p2);}.p3d{background:var(--p3);}
+.day-link{display:flex;align-items:center;justify-content:space-between;padding:.3rem 1.2rem .3rem 2rem;font-size:.77rem;color:var(--muted);cursor:pointer;border-left:2px solid transparent;transition:all .12s;}
+.day-link:hover{color:var(--text);background:var(--bg);}
+.day-link.active{color:var(--text);background:var(--bg2);border-left-color:var(--accent);font-weight:500;}
+.day-link.done-day{color:var(--muted2);}
+.day-link.done-day::after{content:"✓";font-size:.6rem;color:var(--accent3);}
+.dtag{font-family:'JetBrains Mono',monospace;font-size:.6rem;background:var(--tag);padding:.1rem .3rem;border-radius:3px;color:var(--muted);}
+.main{padding:2rem 2.5rem;max-width:800px;}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem;}
+.main-title{font-family:'Fraunces',serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:600;line-height:1.1;margin-bottom:.8rem;}
+.main-title em{font-style:italic;color:var(--accent);}
+.tagline{font-size:.88rem;color:var(--muted);margin-bottom:1.2rem;}
+.stats-row{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:1.5rem;}
+.stat-cell{flex:1;padding:.8rem 1rem;border-right:1px solid var(--border);}
+.stat-cell:last-child{border-right:none;}
+.stat-val{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:600;line-height:1;margin-bottom:.15rem;}
+.stat-lbl{font-family:'JetBrains Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);}
+.info-box{padding:.9rem 1.1rem;border-radius:4px;border:1px solid;border-left-width:3px;margin-bottom:1.2rem;font-size:.84rem;line-height:1.6;}
+.info-box strong{font-family:'JetBrains Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:.3rem;}
+.box-yellow{background:#fef9f0;border-color:#f5d080;border-left-color:var(--yellow);}
+.box-yellow strong{color:var(--yellow);}
+.box-blue{background:#f0f5ff;border-color:#b8cff0;border-left-color:var(--accent2);}
+.box-blue strong{color:var(--accent2);}
+.phase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-bottom:1.5rem;}
+.phase-card{border:1px solid var(--border);border-radius:6px;overflow:hidden;cursor:pointer;transition:all .15s;}
+.phase-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.08);}
+.pc-top{padding:.8rem 1rem .6rem;color:#fff;}
+.p1t{background:var(--p1);}.p2t{background:var(--p2);}.p3t{background:var(--p3);}
+.pc-num{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;opacity:.8;margin-bottom:.2rem;}
+.pc-title{font-family:'Fraunces',serif;font-size:.95rem;font-weight:600;}
+.pc-body{padding:.7rem 1rem;background:var(--surface);}
+.pc-meta{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);text-transform:uppercase;margin-bottom:.3rem;}
+.pc-desc{font-size:.8rem;color:var(--muted);line-height:1.4;}
+.day-card{display:none;animation:fi .2s ease;}
+.day-card.active{display:block;}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.dc-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.2rem;gap:1rem;}
+.badge{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;padding:.25rem .7rem;border-radius:3px;color:#fff;white-space:nowrap;}
+.b1{background:var(--p1);}.b2{background:var(--p2);}.b3{background:var(--p3);}
+.dn{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.25rem;}
+.dt{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:600;line-height:1.2;}
+.dgoal{font-size:.87rem;color:var(--muted);font-style:italic;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
+.sec-lbl{font-family:'JetBrains Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:.6rem;}
+.brow{display:grid;grid-template-columns:80px 24px 1fr;align-items:start;gap:0 .7rem;margin-bottom:.5rem;}
+.btime{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:500;color:var(--accent);text-align:right;padding-top:.05rem;}
+.bicon{font-size:.8rem;text-align:center;padding-top:.05rem;}
+.blabel{font-weight:600;display:block;margin-bottom:.1rem;font-size:.87rem;}
+.bdetail{color:var(--muted);font-size:.8rem;line-height:1.45;}
+.brow.fin .btime{color:var(--accent3);}
+.brow.brk .btime{color:var(--muted2);}
+.brow.brk .bdetail{color:var(--muted);font-style:italic;}
+.task-item{display:flex;align-items:flex-start;gap:.65rem;padding:.5rem .7rem;border-radius:4px;margin-bottom:.3rem;cursor:pointer;transition:background .12s;border:1px solid transparent;}
+.task-item:hover{background:var(--bg2);border-color:var(--border);}
+.task-item.done{opacity:.5;}
+.task-item.done .task-text{text-decoration:line-through;color:var(--muted);}
+.tcb{width:15px;height:15px;border:1.5px solid var(--border2);border-radius:3px;flex-shrink:0;margin-top:.1rem;display:flex;align-items:center;justify-content:center;font-size:.62rem;color:var(--accent3);}
+.task-item.done .tcb{background:var(--border);border-color:var(--border);}
+.task-text{font-size:.87rem;line-height:1.45;}
+.books-row{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.5rem;}
+.bchip{font-size:.74rem;padding:.25rem .65rem;background:var(--tag);border:1px solid var(--border);border-radius:3px;}
+.bchip.fin{background:#f0faf4;border-color:#b8e8c8;color:var(--accent3);}
+.deliv{padding:.9rem 1.1rem;border-radius:4px;border:1px solid var(--border);background:var(--surface);border-left:3px solid var(--p1);margin-bottom:1.5rem;}
+.deliv.p2{border-left-color:var(--p2);}.deliv.p3{border-left-color:var(--p3);}
+.deliv-lbl{font-family:'JetBrains Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--p1);margin-bottom:.3rem;}
+.deliv.p2 .deliv-lbl{color:var(--p2);}.deliv.p3 .deliv-lbl{color:var(--p3);}
+.deliv-text{font-size:.87rem;line-height:1.5;}
+.day-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid var(--border);}
+.nbtn{font-family:'JetBrains Mono',monospace;font-size:.7rem;padding:.5rem 1rem;border:1px solid var(--border2);border-radius:4px;background:var(--surface);color:var(--text);cursor:pointer;transition:all .15s;text-transform:uppercase;letter-spacing:.06em;}
+.nbtn:hover{background:var(--text);color:var(--bg);}
+.nbtn:disabled{opacity:.3;cursor:not-allowed;}
+.nbtn:disabled:hover{background:var(--surface);color:var(--text);}
+.overview-card{display:none;}.overview-card.active{display:block;}
+.tdah-header{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);}
+
+.sched-box{border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-top:.5rem;}
+.srow{display:grid;grid-template-columns:105px 1fr;gap:.5rem;padding:.45rem .8rem;border-bottom:1px solid var(--border);font-size:.83rem;}
+.srow:last-child{border-bottom:none;}
+.srow.brk{background:var(--bg2);color:var(--muted);font-style:italic;}
+.srow.fin{background:#f0faf4;}
+.srow.fin span:last-child{color:var(--accent3);}
+.st{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:500;color:var(--accent);padding-top:.1rem;}
+.srow.brk .st{color:var(--muted2);}
+.srow.fin .st{color:var(--accent3);}
+</style></head>
+<body>
+<div class="topbar">
+  <span>⚡ Hélcio · 60 Dias TDAH · Dev Júnior Portugal</span>
+  <span>
+    <span style="color:var(--muted2)">progresso </span>
+    <span class="prog-bar"><span class="prog-fill" id="pf"></span></span>
+    <span class="prog-pct" id="pp">0%</span>
+    &nbsp;&nbsp;
+    <span id="tbd" style="color:var(--muted2)">Dia — / 60</span>
+  </span>
+</div>
+<div class="layout">
+<div class="sidebar">
+  <div class="sidebar-title">Navegação</div>
+  <div class="day-link active" id="link-ov" onclick="showOv()" style="padding-left:1.2rem;font-weight:600;color:var(--text)">📋 Visão Geral</div>
+  <div class="phase-group-label" onclick="tgl('pg1')"><span class="pdot p1d"></span>Fase 1 · Base (D1–20)</div>
+  <div id="pg1"></div>
+  <div class="phase-group-label" onclick="tgl('pg2')"><span class="pdot p2d"></span>Fase 2 · Projecto (D21–45)</div>
+  <div id="pg2"></div>
+  <div class="phase-group-label" onclick="tgl('pg3')"><span class="pdot p3d"></span>Fase 3 · Mercado (D46–60)</div>
+  <div id="pg3"></div>
+</div>
+<div class="main">
+<div class="overview-card active" id="ov">
+  <div class="tdah-header">
+    <div class="eyebrow">Hélcio Humberto · Engenharia de Software · Lisboa</div>
+    <h1 class="main-title">60 dias para o<br><em>primeiro emprego dev</em></h1>
+    <p class="tagline">4h30/dia · 5×/semana · Flow blocks para TDAH · Full Stack JS + Java · Cripto diário</p>
+    <div class="stats-row">
+      <div class="stat-cell"><div class="stat-val">60</div><div class="stat-lbl">dias</div></div>
+      <div class="stat-cell"><div class="stat-val">270h</div><div class="stat-lbl">total</div></div>
+      <div class="stat-cell"><div class="stat-val">3</div><div class="stat-lbl">fases</div></div>
+      <div class="stat-cell"><div class="stat-val">3</div><div class="stat-lbl">projectos</div></div>
+    </div>
+    <div class="info-box box-yellow">
+      <strong>⚡ Adaptado para TDAH — Flow Mode</strong>
+      Blocos de 1h30–2h de foco profundo (sem interrupções). Cada dia começa com uma tarefa concreta e visível para activar o flow. O resultado do dia é sempre algo que podes ver, abrir no browser, ou commitar — o TDAH precisa de progresso tangível. Quando o dia está difícil: faz pelo menos 1 commit. 1 commit é melhor que zero dias.
+    </div>
+    <div class="info-box box-blue">
+      <strong>📈 Análise Técnica Cripto — 30min todos os dias</strong>
+      Últimos 30 minutos de cada dia: BTC + 1 altcoin. Rotação semanal de indicadores: velas japonesas → RSI → MACD → médias móveis → Bollinger Bands → Fibonacci → Volume Profile. Não é trading — é aprender a ler o mercado de forma sistemática usando TradingView (gratuito).
+    </div>
+  </div>
+  <div class="phase-grid">
+    <div class="phase-card" onclick="showDay(1)">
+      <div class="pc-top p1t"><div class="pc-num">Fase 1 · Dias 1–20</div><div class="pc-title">Consolidar a Base</div></div>
+      <div class="pc-body"><div class="pc-meta">80h · 4 semanas</div><div class="pc-desc">TypeScript sólido, Node/Express com JWT, SQL avançado, React com hooks, SOLID na prática, Docker, CI/CD.</div></div>
+    </div>
+    <div class="phase-card" onclick="showDay(21)">
+      <div class="pc-top p2t"><div class="pc-num">Fase 2 · Dias 21–45</div><div class="pc-title">Projecto Âncora</div></div>
+      <div class="pc-body"><div class="pc-meta">100h · 5 semanas</div><div class="pc-desc">racao-gado Full Stack completo: backend Prisma+Postgres, frontend React, deploy ao vivo, README com storytelling.</div></div>
+    </div>
+    <div class="phase-card" onclick="showDay(46)">
+      <div class="pc-top p3t"><div class="pc-num">Fase 3 · Dias 46–60</div><div class="pc-title">Mercado & Emprego</div></div>
+      <div class="pc-body"><div class="pc-meta">60h · 3 semanas</div><div class="pc-desc">Entrevistas técnicas, CV, LinkedIn, 5 candidaturas/dia, networking em Lisboa.</div></div>
+    </div>
+  </div>
+</div>
+<div id="day-cards"></div>
+</div></div>
+<script>
+const DAYS=[
+  {d:1,ph:1,title:"JavaScript Moderno + Setup",goal:"Arrancar com setup limpo e ES6+ no sangue.",tasks:["Instalar Node 20 LTS + VSCode + ESLint + Prettier", "Criar repo 'helcio-dev-estudos' no GitHub", "10 fun\u00e7\u00f5es ES6+ (arrow, destructuring, spread, optional chaining)", "BTC price fetcher com async/await no terminal", "Primeiro commit do dia", "Ler caps 1-3 Eloquent JS"],books:["Eloquent JavaScript", "JavaScript ECMAScript 6"],deliv:"Repo no GitHub com primeiro commit \u00b7 BTC price fetcher funcionando no terminal"},
+  {d:2,ph:1,title:"TypeScript \u2014 Tipagem que impressiona",goal:"Recrutadores adoram ver TS em projectos j\u00fanior.",tasks:["Instalar TypeScript + tsconfig.json", "Converter BTC fetcher para TS com interfaces", "Criar interface CryptoPortfolio com 5 campos tipados", "Fun\u00e7\u00e3o gen\u00e9rica fetchData<T>() tipada", "Commit com mensagem descritiva", "Ler Eloquent JS caps 4-6"],books:["Eloquent JavaScript", "JavaScript ECMAScript 6"],deliv:"BTC fetcher em TypeScript com interfaces \u00b7 Commit no GitHub"},
+  {d:3,ph:1,title:"Node.js + Express \u2014 Primeiro servidor",goal:"Ter um servidor HTTP real rodando antes do almo\u00e7o.",tasks:["Servidor Express com TypeScript", "Rotas: GET /health, GET /crypto/btc, POST /portfolio", "Middleware de logging de requests", "Tratamento de erros global com try/catch", "Testar todas as rotas no Insomnia", "Commit + README m\u00ednimo"],books:["Programa\u00e7\u00e3o Web com Node e Express"],deliv:"Servidor Express TypeScript rodando com 3 rotas testadas"},
+  {d:4,ph:1,title:"JWT Authentication \u2014 Seguran\u00e7a real",goal:"Implementar autentica\u00e7\u00e3o JWT completa. Toda empresa pede.",tasks:["POST /auth/register com bcrypt", "POST /auth/login com JWT", "Middleware authenticateToken", "Proteger rotas /portfolio com middleware", "Valida\u00e7\u00e3o de input com Zod", "Testar fluxo completo no Insomnia + commit"],books:["Programa\u00e7\u00e3o Web com Node e Express", "Node.js \u2013 Aplica\u00e7\u00f5es Web Real-time"],deliv:"API com JWT completa \u00b7 Fluxo register\u2192login\u2192protected testado"},
+  {d:5,ph:1,title:"SQL s\u00f3lido \u2014 Queries de entrevista",goal:"Dominar as queries que aparecem em 90% das entrevistas.",tasks:["Schema SQL: animais, lotes, racoes, pesagens", "10 queries com JOINs documentadas", "5 queries GROUP BY + HAVING", "3 queries com CTE (WITH)", "Criar \u00edndice e verificar com EXPLAIN", "Endpoint Express conectado \u00e0 BD real"],books:["MySQL \u2013 Comece com o Principal BD"],deliv:"20 queries SQL documentadas + endpoint Express conectado \u00e0 BD"},
+  {d:6,ph:1,title:"React \u2014 Componentes e Hooks modernos",goal:"React funcional, hooks reais, consumindo a tua API.",tasks:["Setup Vite + React + TypeScript + Tailwind", "Componente CryptoPrice consumindo a tua API", "AuthContext com useState para JWT", "Custom hook useFetch<T>() reutiliz\u00e1vel", "Loading skeleton e error state", "Deploy no Vercel + commit"],books:["Desenvolvimento Web com HTML, CSS e JS"],deliv:"Frontend React no Vercel a consumir a API \u00b7 Link p\u00fablico funcionando"},
+  {d:7,ph:1,title:"React Router + Forms + Valida\u00e7\u00e3o",goal:"Navega\u00e7\u00e3o entre p\u00e1ginas e formul\u00e1rios validados.",tasks:["Instalar react-router-dom + configurar rotas", "PrivateRoute component que verifica JWT", "Formul\u00e1rio de login com React Hook Form + Zod", "Integra\u00e7\u00e3o login com backend JWT", "Dashboard com 3 cards de dados reais", "Commit + Vercel actualizado"],books:["Desenvolvimento Web com HTML, CSS e JS"],deliv:"App React com auth end-to-end: login \u2192 JWT \u2192 dashboard protegido"},
+  {d:8,ph:1,title:"C\u00f3digo Limpo \u2014 Refactoring pr\u00e1tico",goal:"Pegar no c\u00f3digo dos 7 dias e melhor\u00e1-lo. Qualidade > quantidade.",tasks:["Ler caps 1-3 C\u00f3digo Limpo e aplicar 5 regras hoje", "Renomear todas as vari\u00e1veis confusas no backend", "Extrair l\u00f3gica de neg\u00f3cio dos controllers para services", "Criar ARCHITECTURE.md explicando decis\u00f5es", "Refactoring frontend: componentes com 1 responsabilidade", "Commit de refactoring com mensagem clara"],books:["C\u00f3digo Limpo"],deliv:"Commit de refactoring \u00b7 ARCHITECTURE.md criado \u00b7 C\u00f3digo mais limpo"},
+  {d:9,ph:1,title:"SOLID na pr\u00e1tica \u2014 N\u00e3o teoria",goal:"SOLID n\u00e3o \u00e9 para decorar. \u00c9 para aplicar no c\u00f3digo hoje.",tasks:["Separar AuthService de UserService (SRP)", "Interface CryptoProvider implementada por CoinGeckoProvider", "Dependency Injection em 2 controllers", "UserRepository seguindo Repository Pattern", "ARCHITECTURE.md com SOLID + exemplos reais do teu c\u00f3digo", "Commit"],books:["Orienta\u00e7\u00e3o a Objetos e SOLID para Ninjas", "Padr\u00f5es de Projecto"],deliv:"ARCHITECTURE.md com SOLID documentado + c\u00f3digo refactorado"},
+  {d:10,ph:1,title:"Testes unit\u00e1rios + Docker b\u00e1sico",goal:"Testes no CI e app em container. Dois diferenciais de j\u00fanior.",tasks:["Instalar Jest + ts-jest + configurar", "5 testes unit\u00e1rios para fun\u00e7\u00f5es de neg\u00f3cio", "Dockerfile para o backend", "docker-compose.yml com app + postgres", "Correr tudo com docker-compose up", "GitHub Actions: pipeline test + build"],books:["Containers com Docker"],deliv:"Testes passando no CI \u00b7 App rodando em Docker localmente"},
+  {d:11,ph:1,title:"Java/Spring Boot \u2014 Setup completo",goal:"API Spring Boot com 3 endpoints. Aproveitando o Java que j\u00e1 sabes.",tasks:["Criar projecto Spring Boot com Spring Initializr", "Entidade Animal com JPA + valida\u00e7\u00f5es", "AnimalRepository extends JpaRepository", "AnimalService com l\u00f3gica de neg\u00f3cio", "AnimalController com 3 endpoints REST", "Testar no Postman + commit"],books:["Spring Boot Microsservi\u00e7os", "Java Efetivo"],deliv:"API Spring Boot com CRUD completo testado no Postman"},
+  {d:12,ph:1,title:"Spring Security + JWT em Java",goal:"Autentica\u00e7\u00e3o JWT no Spring Boot + Flyway migrations.",tasks:["Adicionar Spring Security ao projecto", "Implementar JWT em Java (JwtUtil)", "Configurar SecurityConfig com rotas protegidas", "Flyway com 2 migrations versionadas", "Testar fluxo auth completo", "Commit"],books:["Java Efetivo", "Spring Boot Microsservi\u00e7os"],deliv:"Spring Boot com auth JWT + Flyway migrations rodando"},
+  {d:13,ph:1,title:"Algoritmos \u2014 O que realmente pedem em PT",goal:"Arrays, strings, hashmaps. Sem LeetCode Hard.",tasks:["5 exerc\u00edcios arrays/strings com complexidade explicada", "5 exerc\u00edcios com HashMap/Set", "Gravar explica\u00e7\u00e3o em voz alta de 2 exerc\u00edcios", "ALGORITMOS.md com solu\u00e7\u00f5es documentadas", "Commit"],books:["Entendendo Algoritmos"],deliv:"ALGORITMOS.md com 10 exerc\u00edcios resolvidos \u00b7 Grava\u00e7\u00e3o de mock"},
+  {d:14,ph:1,title:"Git avan\u00e7ado + GitHub profissional",goal:"GitHub Profile que chama aten\u00e7\u00e3o. Recrutadores abrem antes do LinkedIn.",tasks:["Reescrever commits para conventional commits (feat:, fix:, docs:)", "README do perfil GitHub com a tua hist\u00f3ria (BR\u2192PT, agro\u2192dev)", "README de cada projecto pinado com screenshots", "GitHub Actions badge nos READMEs", "Verificar: todos repos pinados com descri\u00e7\u00e3o e tags", "Commit"],books:["Controlando Vers\u00f5es com Git e GitHub"],deliv:"GitHub Profile profissional \u00b7 READMEs completos em todos os projectos"},
+  {d:15,ph:1,title:"Arquitectura Limpa \u2014 Aplicada ao c\u00f3digo",goal:"Reorganizar backend em camadas. O que diferencia um bom j\u00fanior.",tasks:["Reorganizar backend: Domain/Application/Infrastructure", "Criar 1 use case expl\u00edcito (CreateAnimalUseCase)", "Actualizar ARCHITECTURE.md com diagrama", "Verificar que dependency rule n\u00e3o \u00e9 violada", "Commit: feat: apply clean architecture"],books:["Arquitectura Limpa", "Fundamentals of Software Architecture"],deliv:"Backend em Clean Architecture \u00b7 ARCHITECTURE.md com diagrama"},
+  {d:16,ph:1,title:"APIs externas + WebSockets",goal:"BTC em tempo real via WebSocket da Binance + gr\u00e1fico React.",tasks:["Axios service com interceptors e retry", "Consumir CoinGecko: pre\u00e7os de 5 moedas", "WebSocket client conectado \u00e0 Binance stream", "Frontend React com gr\u00e1fico Recharts actualizado em tempo real", "Commit"],books:["Node.js \u2013 Aplica\u00e7\u00f5es Web Real-time"],deliv:"App com BTC em tempo real via WebSocket \u00b7 Gr\u00e1fico animado no frontend"},
+  {d:17,ph:1,title:"Testes de integra\u00e7\u00e3o + CI/CD real",goal:"Pipeline que faz test \u2192 build \u2192 deploy autom\u00e1tico num push.",tasks:["3 testes de integra\u00e7\u00e3o com Supertest", "BD de teste separada para testes", "GitHub Actions: test + build + deploy", "Badge de CI no README", "Verificar: push na main faz deploy autom\u00e1tico no Railway", "Commit"],books:["Test-Driven Development"],deliv:"Pipeline CI/CD funcional \u00b7 Badge verde no README \u00b7 Deploy autom\u00e1tico"},
+  {d:18,ph:1,title:"Redis + Cache \u2014 Performance real",goal:"Cache Redis em endpoints de cripto. Rate limiting.",tasks:["Redis no docker-compose", "CacheService com get/set/invalidate", "Endpoint /crypto/prices com cache de 60s", "Rate limiter com Redis no Express", "Documentar trade-offs JWT stateless vs Redis sessions", "Commit"],books:["Software Architecture: The Hard Parts"],deliv:"Cache Redis funcionando \u00b7 Rate limiting activo \u00b7 Trade-offs documentados"},
+  {d:19,ph:1,title:"Mock entrevista t\u00e9cnica \u2014 Fase 1",goal:"Consolidar tudo da F1 em respostas de entrevista.",tasks:["Code review completo com Issues abertas no GitHub", "Gravar mock entrevista com 10 perguntas t\u00e9cnicas", "ENTREVISTA.md com 20 Q&A", "Identificar 3 pontos mais fracos t\u00e9cnicos", "Commit"],books:["Cracking the Coding Interview"],deliv:"ENTREVISTA.md com 20 Q&A \u00b7 Mock entrevista gravada \u00b7 Issues abertas"},
+  {d:20,ph:1,title:"Revis\u00e3o Fase 1 + Setup racao-gado",goal:"Fechar F1 com chave de ouro. Arrancar o projecto \u00e2ncora.",tasks:["Verificar todos os repos F1 funcionando e com deploy", "Novo repo racao-gado com estrutura monorepo", "README com motiva\u00e7\u00e3o pessoal (pecu\u00e1ria \u2192 dev)", "ERD completo: 6 entidades com rela\u00e7\u00f5es", "ARCHITECTURE.md com decis\u00f5es da stack", "Primeiro commit do projecto \u00e2ncora"],books:["O Programador Pragm\u00e1tico"],deliv:"Repo racao-gado criado \u00b7 ERD documentado \u00b7 Stack decidida \u00b7 Fase 1 \u2713"},
+  {d:21,ph:2,title:"Prisma ORM + PostgreSQL setup",goal:"Base de dados do racao-gado com migrations reais.",tasks:["Schema Prisma com 6 modelos e rela\u00e7\u00f5es (Animal, Lote, Racao, Pesagem, Despesa, Usuario)", "prisma migrate dev --name init", "Seed: 20 animais, 3 lotes, 5 tipos de ra\u00e7\u00e3o", "Script de queries testando todas as rela\u00e7\u00f5es", "Commit"],books:["Fundamentals of Software Architecture"],deliv:"Schema Prisma completo \u00b7 Migrations rodando \u00b7 Seed data inserida"},
+  {d:22,ph:2,title:"Backend racao-gado \u2014 CRUD Animais",goal:"CRUD completo de animais com valida\u00e7\u00e3o Zod.",tasks:["AnimalService com 5 m\u00e9todos CRUD", "AnimalController com rotas RESTful", "Valida\u00e7\u00e3o Zod para cria\u00e7\u00e3o e actualiza\u00e7\u00e3o", "Filtros: por lote, por sexo, por estado", "Collection Insomnia documentada no repo", "Deploy cont\u00ednuo no Railway + commit"],books:["Refactoring (Fowler)"],deliv:"CRUD animais em produ\u00e7\u00e3o \u00b7 Collection Insomnia no repo"},
+  {d:23,ph:2,title:"Backend \u2014 Pesagens e c\u00e1lculos",goal:"Hist\u00f3rico de peso com GMD calculado automaticamente.",tasks:["PesagemService com c\u00e1lculo de GMD", "calcularConversaoAlimentar()", "estimarDataAbate() com base no GMD", "Endpoint GET /animais/:id/producao", "3 testes unit\u00e1rios para as fun\u00e7\u00f5es de c\u00e1lculo", "Commit"],books:["C\u00f3digo Limpo"],deliv:"Endpoints de produ\u00e7\u00e3o funcionando \u00b7 3 fun\u00e7\u00f5es de c\u00e1lculo com testes"},
+  {d:24,ph:2,title:"Backend \u2014 Custos e dashboard",goal:"Custo por cabe\u00e7a por dia + endpoint de dashboard.",tasks:["RacaoService com registo de fornecimento", "CustoService: custo/cabe\u00e7a/dia e custo/lote/per\u00edodo", "Endpoint GET /dashboard com 5 m\u00e9tricas", "Query Prisma optimizada com \u00edndices", "Testes unit\u00e1rios CustoService", "Commit"],books:["Microsservi\u00e7os Prontos para a Produ\u00e7\u00e3o"],deliv:"Dashboard endpoint com 5 m\u00e9tricas \u00b7 CustoService testado"},
+  {d:25,ph:2,title:"Backend \u2014 Multi-tenant + Swagger",goal:"Cada utilizador v\u00ea s\u00f3 os seus dados. Swagger docs.",tasks:["userId como foreign key em Animal, Lote, Racao", "Middleware de scoping por userId", "Guards de role: OWNER vs WORKER", "Swagger docs em /api/docs", "Testar: user A n\u00e3o v\u00ea dados do user B", "Commit"],books:["Microsservi\u00e7os Prontos para a Produ\u00e7\u00e3o"],deliv:"API multi-tenant segura \u00b7 Swagger docs ao vivo em /api/docs"},
+  {d:26,ph:2,title:"Frontend \u2014 Setup React profissional",goal:"Frontend estruturado ao vivo no Vercel com login funcional.",tasks:["Vite + React + TypeScript + Tailwind configurado", "Estrutura: pages, components, hooks, services, types", "AuthContext + PrivateRoute", "Login page funcional integrada com backend JWT", "Dashboard com 4 m\u00e9tricas reais", "Deploy no Vercel + commit"],books:["Desenvolvimento Web com HTML, CSS e JS"],deliv:"Frontend ao vivo no Vercel \u00b7 Login \u2192 Dashboard com dados reais"},
+  {d:27,ph:2,title:"Frontend \u2014 Lista de animais",goal:"Tabela com filtros, busca, pagina\u00e7\u00e3o e modal de detalhes.",tasks:["AnimalTable com 7 colunas e ordena\u00e7\u00e3o", "Busca com debounce 300ms", "Filtros por lote e estado persistidos no URL", "Modal de detalhes com gr\u00e1fico de hist\u00f3rico de peso", "Pagina\u00e7\u00e3o server-side (page, limit params)", "Commit"],books:["C\u00f3digo Limpo"],deliv:"P\u00e1gina de animais com filtros, busca, pagina\u00e7\u00e3o e modal"},
+  {d:28,ph:2,title:"Frontend \u2014 Gr\u00e1ficos e relat\u00f3rios",goal:"3 gr\u00e1ficos Recharts + p\u00e1gina de relat\u00f3rios com selector de per\u00edodo.",tasks:["Gr\u00e1fico linha: evolu\u00e7\u00e3o de peso m\u00e9dio 90 dias", "Gr\u00e1fico barra: custo alimenta\u00e7\u00e3o por m\u00eas", "Gr\u00e1fico pie: distribui\u00e7\u00e3o por lote", "P\u00e1gina /reports com selector de per\u00edodo (7/30/90 dias)", "Mobile responsivo verificado em 375px", "Commit"],books:["Desenvolvimento Web com HTML, CSS e JS"],deliv:"Dashboard com 3 gr\u00e1ficos \u00b7 Relat\u00f3rios com selector \u00b7 Mobile responsivo"},
+  {d:29,ph:2,title:"Frontend \u2014 Formul\u00e1rios de cadastro",goal:"Formul\u00e1rios bem feitos s\u00e3o raros. Os teus v\u00e3o ser um diferencial.",tasks:["Formul\u00e1rio Animal com 8 campos + valida\u00e7\u00e3o Zod", "Formul\u00e1rio Pesagem com selec\u00e7\u00e3o de animal", "Formul\u00e1rio Ra\u00e7\u00e3o com selec\u00e7\u00e3o de lote", "Toast notifications para sucesso/erro", "Loading states em todos os bot\u00f5es de submit", "Commit"],books:["Guia Front-End"],deliv:"3 formul\u00e1rios funcionais com valida\u00e7\u00e3o, loading states e toasts"},
+  {d:30,ph:2,title:"Integra\u00e7\u00e3o completa + bug fixing",goal:"Testar de ponta a ponta. Corrigir bugs cr\u00edticos.",tasks:["Teste end-to-end manual: criar conta \u2192 login \u2192 5 animais \u2192 pesagens \u2192 dashboard", "Lista de bugs com prioridade", "Top 5 bugs cr\u00edticos corrigidos", "Lighthouse score >80 no Vercel", "useMemo/useCallback aplicado onde necess\u00e1rio", "Commit fix: ..."],books:["O Programador Pragm\u00e1tico"],deliv:"App testada de ponta a ponta \u00b7 Bugs cr\u00edticos corrigidos \u00b7 Lighthouse >80"},
+  {d:31,ph:2,title:"README profissional \u2014 Storytelling",goal:"O README que faz recrutadores clicarem no deploy.",tasks:["README com hist\u00f3ria pessoal no in\u00edcio (pecu\u00e1ria \u2192 dev)", "Screenshots de Dashboard, Animais, Relat\u00f3rios", "GIF demo da funcionalidade principal", "Badges: build status, deploy, tecnologias", "Sec\u00e7\u00e3o 'Como correr' passo a passo testada", "Commit"],books:["O Programador Apaixonado"],deliv:"README com hist\u00f3ria, screenshots, GIF e documenta\u00e7\u00e3o t\u00e9cnica"},
+  {d:32,ph:2,title:"V\u00eddeo demo + Post LinkedIn",goal:"O projecto precisa de chegar a pessoas.",tasks:["Gravar v\u00eddeo demo 2-3 min no Loom", "Publicar post LinkedIn com hist\u00f3ria pessoal", "Link do v\u00eddeo no README", "Fechar 3 Issues de melhoria de UX", "Responder a todos os coment\u00e1rios do post", "Commit"],books:["O Programador Apaixonado"],deliv:"V\u00eddeo demo publicado \u00b7 Post LinkedIn \u00b7 3 melhorias UX"},
+  {d:33,ph:2,title:"Cripto Tracker \u2014 Setup e core",goal:"Segundo projecto: liga tech + cripto. Setup hoje.",tasks:["Repo cripto-tracker com Vite + React + TS + Tailwind", "Lista top 50 moedas com CoinGecko API", "Portfolio tracker: adicionar moedas + calcular valor total em EUR", "Gr\u00e1fico de hist\u00f3rico de pre\u00e7o (7/30/90 dias) com Recharts", "Deploy no Vercel + commit"],books:["Programa\u00e7\u00e3o Web com Node e Express"],deliv:"Cripto tracker ao vivo no Vercel \u00b7 Portfolio com valor total"},
+  {d:34,ph:2,title:"Cripto Tracker \u2014 Alertas + indicadores",goal:"Features que mostram que entendes o dom\u00ednio cripto.",tasks:["Price alerts com Browser Notification API", "SMA 7 e SMA 14 calculadas e mostradas no gr\u00e1fico", "Fear & Greed index da API alternative.me", "Dark mode toggle", "README com hist\u00f3ria cripto + screenshots", "Commit"],books:["JavaScript: O Guia Definitivo"],deliv:"Cripto tracker completo com alertas, SMA e dark mode"},
+  {d:35,ph:2,title:"racao-gado \u2014 Features finais",goal:"\u00daltimas features antes do polish.",tasks:["Export CSV de animais e relat\u00f3rio de custos", "3 alertas visuais no dashboard (sem pesagem 30d, GMD negativo, custo alto)", "Empty states em todas as listas", "Loading skeletons consistentes", "Error states com retry", "Commit"],books:["C\u00f3digo Limpo"],deliv:"racao-gado com export CSV + alertas + UX consistente"},
+  {d:36,ph:2,title:"Polish + Testes E2E + Lighthouse",goal:"O projecto de entrevista tem de ser impec\u00e1vel.",tasks:["Audit completo: percorrer toda a app como utilizador exigente", "Corrigir todos os issues encontrados", "Zero erros na consola do browser", "2 testes Playwright (login flow + criar animal)", "Lighthouse score >85", "Commit"],books:["Testes Automatizados de Software"],deliv:"Zero erros consola \u00b7 Lighthouse >85 \u00b7 2 testes E2E no CI"},
+  {d:37,ph:2,title:"Documenta\u00e7\u00e3o t\u00e9cnica completa",goal:"Qualquer dev consegue correr o projecto em 5 minutos.",tasks:["README definitivo com todos os elementos", "CONTRIBUTING.md", "JSDoc nas fun\u00e7\u00f5es de neg\u00f3cio principais", "Swagger 100% documentado", "PORTFOLIO.md com os 2 projectos e links", "Commit"],books:["O Programador Apaixonado"],deliv:"Documenta\u00e7\u00e3o completa \u00b7 Swagger 100% \u00b7 PORTFOLIO.md criado"},
+  {d:38,ph:2,title:"Mock entrevista \u2014 Projecto",goal:"Pratica explicar o projecto. Entender bem n\u00e3o chega \u2014 articular bem.",tasks:["Resposta gravada 3 min: 'fala-me do teu projecto'", "Resposta gravada 2 min: 'qual o maior desafio t\u00e9cnico?'", "3 exerc\u00edcios de live coding em voz alta", "1 feature de \u00faltimo minuto implementada", "Commit"],books:["Cracking the Coding Interview"],deliv:"Grava\u00e7\u00f5es de mock entrevista \u00b7 Projecto pronto para mostrar"},
+  {d:39,ph:2,title:"CV + LinkedIn + 10 candidaturas",goal:"O projecto est\u00e1 pronto. Come\u00e7as a candidatar hoje.",tasks:["CV em portugu\u00eas finalizado (PDF 1 p\u00e1gina)", "CV em ingl\u00eas finalizado (PDF 1 p\u00e1gina)", "LinkedIn About com hist\u00f3ria pessoal", "LinkedIn: 2 projectos em destaque com links", "10 candidaturas em Landing.jobs + ITJobs + LinkedIn", "Spreadsheet: empresa, data, vaga, estado"],books:["O Programador Apaixonado"],deliv:"CV PT + EN \u00b7 LinkedIn optimizado \u00b7 10 primeiras candidaturas feitas"},
+  {d:40,ph:2,title:"Revis\u00e3o Fase 2 + prep entrevistas",goal:"Fechar F2. ENTREVISTA.md com 30 Q&A.",tasks:["Verificar todos os deploys funcionando", "ENTREVISTA.md com 30 Q&A (10 JS/Node, 10 React, 5 SQL, 5 Arch.)", "Gravar simula\u00e7\u00e3o de entrevista de 45 min", "Identificar 3 pontos fracos para F3", "10 novas candidaturas"],books:["Cracking the Coding Interview"],deliv:"ENTREVISTA.md com 30 Q&A \u00b7 Simula\u00e7\u00e3o gravada \u00b7 Fase 2 conclu\u00edda \u2713"},
+  {d:41,ph:2,title:"Rotina de candidaturas \u2014 5 por dia",goal:"Candidatar \u00e9 um trabalho. 5 vagas por dia, sem excep\u00e7\u00f5es.",tasks:["Revis\u00e3o de 5 Q&A do ENTREVISTA.md", "2 exerc\u00edcios de algoritmos", "5 candidaturas feitas e registadas na spreadsheet", "1 mensagem personalizada a recrutador no LinkedIn", "1 feature ou artigo publicado para manter GitHub activo", "Commit"],books:["O Programador Pragm\u00e1tico"],deliv:"5 candidaturas feitas \u00b7 Spreadsheet actualizada \u00b7 Progresso t\u00e9cnico mantido"},
+  {d:42,ph:2,title:"Preparar take-home challenges",goal:"Empresas em PT d\u00e3o take-home challenges. Treina o formato.",tasks:["CRUD completo do zero em 2h30 (API REST + auth + testes)", "Deploy do challenge", "README profissional como entregaria a uma empresa", "Grava\u00e7\u00e3o 3 min explicando as decis\u00f5es t\u00e9cnicas", "5 candidaturas do dia", "Commit"],books:["Cracking the Coding Interview"],deliv:"Take-home challenge completo e deployado como portfolio piece extra"},
+  {d:43,ph:2,title:"Networking em Lisboa \u2014 Comunidade tech",goal:"1 conex\u00e3o real vale mais que 20 candidaturas frias.",tasks:["Inscri\u00e7\u00e3o em 1 meetup tech em Lisboa (Meetup.com)", "5 coment\u00e1rios de valor em posts de devs PT no LinkedIn", "Candidaturas em 3 startups Lisboa (Feedzai, Unbabel, Infraspeak...)", "5 candidaturas totais do dia", "Commit"],books:["O Programador Apaixonado"],deliv:"1 meetup inscrito \u00b7 Candidaturas em startups PT \u00b7 Coment\u00e1rios LinkedIn"},
+  {d:44,ph:2,title:"Entrevista simulada completa",goal:"Simular uma entrevista real de 60 minutos do in\u00edcio ao fim.",tasks:["Simula\u00e7\u00e3o de entrevista 60 min gravada (intro + t\u00e9cnico + projecto + Q&A)", "Debriefing escrito com 5 pontos de melhoria", "Estudo dos 2 pontos mais fracos identificados", "5 candidaturas do dia", "Commit"],books:["Cracking the Coding Interview"],deliv:"Simula\u00e7\u00e3o gravada + debriefing + plano de melhoria dos pontos fracos"},
+  {d:45,ph:2,title:"Perguntas dif\u00edceis \u2014 O que j\u00faniores erram",goal:"Event Loop, N+1 problem, Transactions, System Design b\u00e1sico.",tasks:["Event Loop do Node.js explicado por escrito e em voz alta", "N+1 problem resolvido no racao-gado (Prisma include)", "Transactions Prisma: 1 exemplo pr\u00e1tico documentado", "System design de 1 sistema simples em voz alta", "5 candidaturas", "Commit"],books:["Node.js \u2013 Aplica\u00e7\u00f5es Web Real-time", "Software Architecture: The Hard Parts"],deliv:"Event Loop documentado \u00b7 N+1 corrigido \u00b7 System design praticado"},
+  {d:46,ph:3,title:"Comportamento em entrevista \u2014 Soft skills",goal:"T\u00e9cnica STAR. TypeScript avan\u00e7ado. Follow-up.",tasks:["3 respostas STAR preparadas por escrito (erro, press\u00e3o, por que PT?)", "TypeScript avan\u00e7ado: conditional types, mapped types, template literal types", "Follow-up educado em 3 candidaturas antigas (7+ dias sem resposta)", "5 candidaturas novas", "Commit"],books:["Manual de Sobreviv\u00eancia do Novo Programador"],deliv:"3 respostas STAR \u00b7 TypeScript avan\u00e7ado praticado \u00b7 Follow-up enviado"},
+  {d:47,ph:3,title:"Velocidade + qualidade \u2014 Challenge mode",goal:"CRUD do zero em <2h30. Self-review. Bug-fixing.",tasks:["CRUD completo do zero em menos de 2h30", "Self-review do pr\u00f3prio c\u00f3digo com Issues abertas", "3 bugs corrigidos em bug-fixing exercise", "5 candidaturas", "Commit"],books:["O Programador Pragm\u00e1tico"],deliv:"CRUD do zero em <2h30 \u00b7 Self-review com Issues documentadas"},
+  {d:48,ph:3,title:"Meetup de tech \u2014 Presencial",goal:"1 evento, 3 conversas, 1 contacto LinkedIn. Simples assim.",tasks:["Prepara\u00e7\u00e3o para o meetup (pesquisa speakers, 2 perguntas preparadas)", "GraphQL b\u00e1sico: 1 endpoint com Apollo Server", "5 candidaturas (foco em empresas m\u00e9dias 50-200 pessoas)", "Ir ao meetup + adicionar 3+ pessoas no LinkedIn", "Commit"],books:["Guia da Startup"],deliv:"Meetup frequentado \u00b7 3+ conex\u00f5es novas \u00b7 GraphQL b\u00e1sico implementado"},
+  {d:49,ph:3,title:"Semana 10 \u2014 Manter o ritmo",goal:"A semana mais dif\u00edcil: sem respostas. N\u00e3o desistas.",tasks:["Next.js b\u00e1sico: converter 1 p\u00e1gina do cripto tracker", "Lista de 20 target companies em Portugal", "5 candidaturas", "Ler 3 caps de O Programador Apaixonado", "Commit"],books:["O Programador Apaixonado"],deliv:"Next.js b\u00e1sico praticado \u00b7 Lista de 20 target companies \u00b7 5 candidaturas"},
+  {d:50,ph:3,title:"Preparar para primeira entrevista real",goal:"Se a entrevista apareceu, prepara agora. Se n\u00e3o, segue.",tasks:["Research completo de 2 empresas em processo (produto, stack, valores)", "3 perguntas inteligentes preparadas por empresa", "Simula\u00e7\u00e3o de entrevista espec\u00edfica gravada", "Estudo da stack da empresa alvo", "5 candidaturas", "Commit"],books:["Cracking the Coding Interview"],deliv:"Research de 2 empresas \u00b7 Simula\u00e7\u00e3o espec\u00edfica gravada \u00b7 Stack estudada"},
+  {d:51,ph:3,title:"Features extras + artigo t\u00e9cnico",goal:"Projecto activo = sinal de dedica\u00e7\u00e3o. Artigo = visibilidade.",tasks:["1 feature nova no racao-gado (i18n, dark mode, ou PWA b\u00e1sico)", "Artigo t\u00e9cnico publicado no dev.to ou Hashnode", "Follow-up em 3 candidaturas antigas", "2 mensagens personalizadas a recrutadores", "5 candidaturas", "Commit"],books:["O Programador Apaixonado"],deliv:"1 feature nova deployada \u00b7 Artigo t\u00e9cnico publicado \u00b7 Follow-ups enviados"},
+  {d:52,ph:3,title:"Design Patterns \u2014 Protocolo de challenge",goal:"1 design pattern + protocolo para receber desafios t\u00e9cnicos.",tasks:["1 design pattern implementado em TypeScript (Observer, Strategy, ou Factory)", "Protocolo escrito para desafios t\u00e9cnicos (ler \u2192 planear \u2192 implementar \u2192 testar \u2192 documentar \u2192 entregar)", "5 candidaturas", "Commit"],books:["Padr\u00f5es de Projecto"],deliv:"Design pattern implementado \u00b7 Protocolo de challenge t\u00e9cnico escrito"},
+  {d:53,ph:3,title:"Revis\u00e3o t\u00e9cnica \u2014 Honestidade brutal",goal:"A 2 semanas do fim: o que ainda precisas melhorar?",tasks:["Lista honesta de pontos fracos t\u00e9cnicos (sem julgamento)", "1h30 de estudo focado no ponto mais cr\u00edtico", "Activar 'Open to Work' no LinkedIn (s\u00f3 recrutadores v\u00eaem)", "5 candidaturas", "Commit"],books:["C\u00f3digo Limpo"],deliv:"Pontos fracos identificados e estudados \u00b7 Open to Work activo"},
+  {d:54,ph:3,title:"Debriefing de entrevistas \u2014 Aprender com cada uma",goal:"Cada entrevista \u00e9 dados. Analisa e melhora.",tasks:["ENTREVISTAS_LOG.md: o que perguntaram, o que travou, o que respondeste bem", "Estudo dos gaps identificados nas entrevistas", "5 candidaturas (incluindo Porto e remote)", "Commit"],books:["Cracking the Coding Interview"],deliv:"ENTREVISTAS_LOG.md \u00b7 Gaps estudados \u00b7 Candidaturas expandidas"},
+  {d:55,ph:3,title:"Projecto 3 \u2014 API de an\u00e1lise t\u00e9cnica cripto",goal:"O teu terceiro projecto liga os dois mundos: tech + cripto.",tasks:["API Node.js + Express: endpoint /analysis/:symbol retorna SMA, RSI, MACD", "Dados hist\u00f3ricos da CoinGecko API", "Deploy no Railway", "README com motiva\u00e7\u00e3o pessoal (an\u00e1lise t\u00e9cnica \u2192 c\u00f3digo)", "5 candidaturas em fintechs e cripto companies", "Commit"],books:["Programa\u00e7\u00e3o Web com Node e Express"],deliv:"3\u00ba projecto deployado \u00b7 Candidaturas em fintechs \u00b7 Dois mundos unidos"},
+  {d:56,ph:3,title:"A reta final \u2014 Revis\u00e3o geral",goal:"4 dias para o fim. Estado completo.",tasks:["Verificar todos os deploys (racao-gado, cripto tracker, proj 3)", "Revis\u00e3o de todos os 30 Q&A do ENTREVISTA.md", "Simula\u00e7\u00e3o final de entrevista de 45 min gravada", "5 candidaturas personalizadas", "Commit"],books:["O Programador Pragm\u00e1tico"],deliv:"Estado completo verificado \u00b7 Simula\u00e7\u00e3o final gravada \u00b7 Candidaturas de qualidade"},
+  {d:57,ph:3,title:"Follow-up activo e persist\u00eancia",goal:"A maioria das ofertas vem de follow-up, n\u00e3o da candidatura inicial.",tasks:["Kubernetes b\u00e1sico documentado em 1 par\u00e1grafo (pods, services, deployments)", "Follow-up educado em TODAS as candidaturas com 7+ dias sem resposta", "Audit de 30 segundos do perfil externo (LinkedIn + GitHub)", "5 candidaturas", "Commit"],books:["O Programador Apaixonado"],deliv:"Follow-up enviado em candidaturas antigas \u00b7 Kubernetes b\u00e1sico documentado"},
+  {d:58,ph:3,title:"Manter o c\u00f3digo activo",goal:"Commits di\u00e1rios sinalizam consist\u00eancia.",tasks:["1 feature nova ou 2\u00ba artigo t\u00e9cnico publicado", "5 candidaturas (incluindo 1-2 remote europeia)", "Ler caps finais de O Programador Pragm\u00e1tico", "Commit"],books:["O Programador Pragm\u00e1tico"],deliv:"GitHub activo \u00b7 Candidaturas europeias adicionadas"},
+  {d:59,ph:3,title:"Prepara\u00e7\u00e3o psicol\u00f3gica \u2014 Carta para ti",goal:"O emprego vem. A quest\u00e3o \u00e9 quando, n\u00e3o se.",tasks:["Estudo livre de 2h no que te d\u00e1 mais prazer hoje", "Escrever carta para o H\u00e9lcio do dia 1 (o que mudou, o que aprendeste)", "5 candidaturas \u2014 as \u00faltimas do plano, n\u00e3o da carreira", "Commit"],books:["O Programador Apaixonado"],deliv:"Carta escrita e guardada \u00b7 5 candidaturas \u00b7 GitHub verde"},
+  {d:60,ph:3,title:"Dia 60 \u2014 A carreira come\u00e7a",goal:"60 dias. 270 horas. 3 projectos. O plano termina. A carreira come\u00e7a.",tasks:["Abrir cada projecto e verificar estado: tudo ao vivo e funcionando?", "Contar e documentar as m\u00e9tricas: candidaturas, entrevistas, commits, projectos, horas", "Escrever o pr\u00f3ximo plano de 30 dias: o que estudas enquanto esperas", "5 candidaturas \u2014 o h\u00e1bito continua", "Commit \u2014 o \u00faltimo do plano, n\u00e3o da carreira"],books:["O Programador Apaixonado", "O Programador Pragm\u00e1tico"],deliv:"60 dias completos \u2713 \u00b7 M\u00e9tricas documentadas \u00b7 Pr\u00f3ximo plano escrito \u00b7 Carreira iniciada"},
+];
+const DL={"1": "JS Moderno", "2": "TypeScript", "3": "Express", "4": "JWT Auth", "5": "SQL", "6": "React Hooks", "7": "Router+Forms", "8": "C\u00f3digo Limpo", "9": "SOLID", "10": "Testes+Docker", "11": "Java/Spring", "12": "Spring Security", "13": "Algoritmos", "14": "Git+GitHub", "15": "Clean Arch.", "16": "WebSockets", "17": "CI/CD", "18": "Redis", "19": "Mock Entrevista", "20": "Revis\u00e3o F1", "21": "Prisma Setup", "22": "CRUD Animais", "23": "Pesagens", "24": "Custos", "25": "Multi-tenant", "26": "Frontend Setup", "27": "Lista Animais", "28": "Gr\u00e1ficos", "29": "Formul\u00e1rios", "30": "Integra\u00e7\u00e3o", "31": "README", "32": "V\u00eddeo+LinkedIn", "33": "Cripto Tracker", "34": "Alertas", "35": "Features Finais", "36": "Polish+E2E", "37": "Documenta\u00e7\u00e3o", "38": "Mock Entrevista", "39": "CV+Candidaturas", "40": "Revis\u00e3o F2", "41": "5 Candidaturas", "42": "Take-home", "43": "Networking", "44": "Simula\u00e7\u00e3o", "45": "Perguntas Dif\u00edceis", "46": "Soft Skills", "47": "Velocidade", "48": "Meetup", "49": "Manter Ritmo", "50": "1\u00aa Entrevista", "51": "Features+Artigo", "52": "Design Patterns", "53": "Revis\u00e3o T\u00e9cnica", "54": "Debriefing", "55": "Proj. 3", "56": "Reta Final", "57": "Follow-up", "58": "Activo", "59": "Carta para mim", "60": "Dia Final"};
+
+
+const STORAGE_KEY='plano60dias_checks';
+const checks=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
+const phg={1:'pg1',2:'pg2',3:'pg3'};
+
+function buildSidebar(){
+  DAYS.forEach(day=>{
+    const el=document.createElement('div');
+    el.className='day-link';
+    el.id='link-'+day.d;
+    el.onclick=()=>showDay(day.d);
+    el.innerHTML='<span>'+(DL[day.d]||day.title.substring(0,18))+'</span><span class="dtag">D'+day.d+'</span>';
+    document.getElementById(phg[day.ph]).appendChild(el);
+  });
+}
+
+function buildDayCards(){
+  const container=document.getElementById('day-cards');
+  DAYS.forEach(day=>{
+    const card=document.createElement('div');
+    card.className='day-card';
+    card.id='day-'+day.d;
+    const phl=['','Fase 1','Fase 2','Fase 3'][day.ph];
+    const bc=['','b1','b2','b3'][day.ph];
+    const dc=['','','p2','p3'][day.ph];
+    const tasksH=day.tasks.map((t,i)=>{
+      const k='d'+day.d+'_t'+i;
+      return '<div class="task-item" onclick="toggleTask(this,\''+k+'\')"><div class="tcb"></div><span class="task-text">'+t+'</span></div>';
+    }).join('');
+    const booksH=day.books.map(b=>'<span class="bchip">'+b+'</span>').join('')+'<span class="bchip fin">📈 TradingView — 30 min análise técnica</span>';
+    card.innerHTML=
+      '<div class="dc-header">'+
+        '<div>'+
+          '<div class="dn">'+phl+' · Dia '+day.d+' de 60</div>'+
+          '<h2 class="dt">'+day.title+'</h2>'+
+        '</div>'+
+        '<span class="badge '+bc+'">'+phl+'</span>'+
+      '</div>'+
+      '<p class="dgoal">'+day.goal+'</p>'+
+      '<div style="margin-bottom:1.4rem">'+
+        '<div class="sec-lbl">📅 Estrutura do dia — 4h30 de flow</div>'+
+        '<div class="sched-box">'+
+          '<div class="srow"><span class="st">09:00–09:15</span><span>☕ <b>Arranque rápido</b> — tarefa âncora concreta (activa o flow)</span></div>'+
+          '<div class="srow"><span class="st">09:15–11:15</span><span>💻 <b>Flow Block 1</b> — tema principal do dia (2h de foco profundo)</span></div>'+
+          '<div class="srow brk"><span class="st">11:15–11:30</span><span>🚶 Pausa activa — anda 10 min, sem ecrã</span></div>'+
+          '<div class="srow"><span class="st">11:30–13:00</span><span>💻 <b>Flow Block 2</b> — continuar / aprofundar / praticar</span></div>'+
+          '<div class="srow brk"><span class="st">13:00–14:00</span><span>🍽️ Almoço</span></div>'+
+          '<div class="srow"><span class="st">14:00–15:30</span><span>📖 <b>Flow Block 3</b> — leitura activa + segundo tema</span></div>'+
+          '<div class="srow fin"><span class="st">15:30–16:00</span><span>📈 <b>Análise técnica cripto</b> — BTC + 1 altcoin (30 min)</span></div>'+
+        '</div>'+
+      '</div>'+
+      '<div style="margin-bottom:1.4rem">'+
+        '<div class="sec-lbl">✅ Tarefas do dia</div>'+
+        tasksH+
+      '</div>'+
+      '<div style="margin-bottom:1.4rem">'+
+        '<div class="sec-lbl" style="margin-bottom:.4rem">📚 Leitura do dia</div>'+
+        '<div class="books-row">'+booksH+'</div>'+
+      '</div>'+
+      '<div class="deliv '+dc+'">'+
+        '<div class="deliv-lbl">🎯 Entregável do dia</div>'+
+        '<div class="deliv-text">'+day.deliv+'</div>'+
+      '</div>'+
+      '<div class="day-nav">'+
+        '<button class="nbtn" onclick="showDay('+(day.d-1)+')" '+(day.d===1?'disabled':'')+'>← Dia '+(day.d-1)+'</button>'+
+        '<span style="font-family:JetBrains Mono,monospace;font-size:.63rem;color:var(--muted)">Dia '+day.d+' / 60</span>'+
+        '<button class="nbtn" onclick="showDay('+(day.d+1)+')" '+(day.d===60?'disabled':'')+'>Dia '+(day.d+1)+' →</button>'+
+      '</div>';
+    container.appendChild(card);
+  });
+}
+
+function showOv(){
+  document.querySelectorAll('.day-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('ov').classList.add('active');
+  document.querySelectorAll('.day-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('link-ov').classList.add('active');
+  document.getElementById('tbd').textContent='Dia — / 60';
+}
+
+function showDay(n){
+  if(n<1||n>60)return;
+  document.getElementById('ov').classList.remove('active');
+  document.querySelectorAll('.day-card').forEach(c=>c.classList.remove('active'));
+  const card=document.getElementById('day-'+n);
+  if(card)card.classList.add('active');
+  document.querySelectorAll('.day-link').forEach(l=>l.classList.remove('active'));
+  const lnk=document.getElementById('link-'+n);
+  if(lnk){lnk.classList.add('active');lnk.scrollIntoView({block:'nearest'});}
+  document.getElementById('link-ov').classList.remove('active');
+  document.getElementById('tbd').textContent='Dia '+n+' / 60';
+  window.scrollTo(0,0);
+}
+
+function tgl(id){
+  const el=document.getElementById(id);
+  el.style.display=el.style.display==='none'?'':'none';
+}
+
+function updateProgress(){
+  const allTotal=DAYS.reduce((a,d)=>a+d.tasks.length,0);
+  const done=Object.values(checks).filter(Boolean).length;
+  const pct=Math.round((done/allTotal)*100);
+  document.getElementById('pf').style.width=pct+'%';
+  document.getElementById('pp').textContent=pct+'%';
+  DAYS.forEach(day=>{
+    const tot=day.tasks.length;
+    const dn=day.tasks.filter((_,i)=>checks['d'+day.d+'_t'+i]).length;
+    const lnk=document.getElementById('link-'+day.d);
+    if(lnk)lnk.classList.toggle('done-day',dn===tot);
+  });
+}
+
+function toggleTask(el,key){
+  el.classList.toggle('done');
+  el.querySelector('.tcb').textContent=el.classList.contains('done')?'✓':'';
+  checks[key]=el.classList.contains('done');
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(checks));
+  updateProgress();
+}
+
+function applyChecks(){
+  Object.entries(checks).forEach(([key,done])=>{
+    if(!done)return;
+    const m=key.match(/^d(\d+)_t(\d+)$/);
+    if(!m)return;
+    const card=document.getElementById('day-'+m[1]);
+    if(!card)return;
+    const tasks=card.querySelectorAll('.task-item');
+    const task=tasks[m[2]];
+    if(task){task.classList.add('done');task.querySelector('.tcb').textContent='✓';}
+  });
+}
+
+buildSidebar();
+buildDayCards();
+applyChecks();
+updateProgress();
+
+</script>
+</body>
+</html>

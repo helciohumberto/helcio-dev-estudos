@@ -3,6 +3,13 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import cors from "cors";
 import { Request, Response, NextFunction } from "express";
+import "dotenv/config";
+
+if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET não está definido no .env")
+}
+
+const JWT_SECRET = process.env.JWT_SECRET
 
 declare global {
   namespace Express {
@@ -53,7 +60,7 @@ app.post("/auth", async (req, res) => {
   if (!passwordValida) {
     return erroCredenciaisInvalidas(res);
   }
-  const token = jwt.sign({ email: utilizador.email }, "segredo123", {
+  const token = jwt.sign({ email: utilizador.email }, JWT_SECRET, {
     expiresIn: "1h",
   });
   res.json({ token });
@@ -65,7 +72,7 @@ function autenticar(req: Request, res: Response, next: NextFunction) {
     return erroCredenciaisInvalidas(res);
   }
   try {
-    const payload = jwt.verify(token, "segredo123");
+    const payload = jwt.verify(token, JWT_SECRET);
     req.utilizador = payload;
     next();
   } catch {
