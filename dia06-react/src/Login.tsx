@@ -20,16 +20,13 @@ function Login() {
   const navigate = useNavigate();
 
   async function fazerLogin(email: string, senha: string) {
-    const resposta = await fetch(
-      "https://helcio-dev-estudos-production.up.railway.app/auth",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password: senha }),
+    const resposta = await fetch(`${import.meta.env.VITE_API_URL}/auth`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({ email, password: senha }),
+    });
     const dados = await resposta.json();
     return dados;
   }

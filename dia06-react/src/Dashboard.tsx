@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const [mensagem, setMensagem] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   useEffect(() => {
     async function buscarDados() {
       const token = localStorage.getItem("token");
 
       const resposta = await fetch(
-        "https://helcio-dev-estudos-production.up.railway.app/protegido",
+        `${import.meta.env.VITE_API_URL}/protegido`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -24,9 +24,9 @@ function Dashboard() {
     buscarDados();
   }, []);
 
-  function handleLogout(){
-    localStorage.removeItem("token")
-    navigate("/login")
+  function handleLogout() {
+    localStorage.removeItem("token");
+    navigate("/login");
   }
 
   return (
