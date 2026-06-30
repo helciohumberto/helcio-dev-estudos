@@ -45,13 +45,28 @@ function Login() {
   }
 
   return (
-    <div>
-      <h1>Login</h1>
-      <input {...register("email")} type="email" placeholder="Email" />
-      {errors.email && <p>{errors.email.message}</p>}
-      <input {...register("senha")} type="password" placeholder="Senha" />
-      {errors.senha && <p>{errors.senha.message}</p>}
-      <button onClick={handleSubmit(handleLogin)}>Entrar</button>
+    <div className="flex flex-col items-center justify-center min-h-screen gap-4 bg-gray-900">
+      <h1 className="text-3xl font-bold text-white">Login</h1>
+      <input
+        {...register("email")}
+        type="email"
+        placeholder="Email"
+        className="px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-purple-500 w-64"
+      />{" "}
+      {errors.email && <p className="text-red-400 text-sm">{errors.email.message}</p>}
+      <input
+        {...register("senha")}
+        type="password"
+        placeholder="Senha"
+        className="px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-purple-500 w-64"
+      />
+      {errors.senha && <p className="text-red-400 text-sm">{errors.senha.message}</p>}
+      <button
+        onClick={handleSubmit(handleLogin)}
+        className="px-4 py-2 rounded-lg bg-purple-600 text-white font-semibold hover:bg-purple-700 transition w-64"
+      >
+        Entrar
+      </button>
     </div>
   );
 }
