@@ -4,9 +4,13 @@ import jwt from "jsonwebtoken";
 import cors from "cors";
 import { Request, Response, NextFunction } from "express";
 import "dotenv/config";
+import { CoinGeckoProvider } from "./CoinGeckoProvider"
+
+const cryptoProvider = new CoinGeckoProvider()
+
 
 if (!process.env.JWT_SECRET) {
-    throw new Error("JWT_SECRET não está definido no .env")
+  throw new Error("JWT_SECRET não está definido no .env")
 }
 
 const JWT_SECRET = process.env.JWT_SECRET
@@ -40,20 +44,20 @@ interface Utilizador {
 
 const utilizadores: Utilizador[] = [];
 async function criarUtilizador(email: string, password: string) {
-    const passwordHash = await bcrypt.hash(password, 10);
+  const passwordHash = await bcrypt.hash(password, 10);
     utilizadores.push({ email, password: passwordHash });
-}
-app.post("/register", async (req, res) => {
-  const {email, password} = req.body;
-  await criarUtilizador(email, password);
-  console.log(utilizadores);
-  res.json({ mensagem: "Utilizador criado com sucesso" });
-});
-
-app.post("/auth", async (req, res) => {
-  const { email, password } = req.body;
-  const utilizador = utilizadores.find((u) => u.email === email);
-  if (!utilizador) {
+  }
+  app.post("/register", async (req, res) => {
+    const {email, password} = req.body;
+    await criarUtilizador(email, password);
+    console.log(utilizadores);
+    res.json({ mensagem: "Utilizador criado com sucesso" });
+  });
+  
+  app.post("/auth", async (req, res) => {
+    const { email, password } = req.body;
+    const utilizador = utilizadores.find((u) => u.email === email);
+    if (!utilizador) {
     return erroCredenciaisInvalidas(res);
   }
   const passwordValida = await bcrypt.compare(password, utilizador.password);
@@ -83,6 +87,12 @@ function autenticar(req: Request, res: Response, next: NextFunction) {
 app.get("/protegido", autenticar, (req, res) => {
   res.json({ mensagem: "Acedeste a uma rota protegida!" });
 });
+
+app.get("/crypto/:symbol", async (req, res) => {
+    const { symbol } = req.params
+    const preco = await cryptoProvider.getPrice(symbol)
+    res.json({ symbol, preco })
+})
 
 app.listen(3000, () => {
   console.log("Servidor rodando na porta 3000");
