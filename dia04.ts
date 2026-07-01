@@ -4,10 +4,8 @@ import jwt from "jsonwebtoken";
 import cors from "cors";
 import { Request, Response, NextFunction } from "express";
 import "dotenv/config";
+import { CryptoProvider } from "./CryptoProvider"
 import { CoinGeckoProvider } from "./CoinGeckoProvider"
-
-const cryptoProvider = new CoinGeckoProvider()
-
 
 if (!process.env.JWT_SECRET) {
   throw new Error("JWT_SECRET não está definido no .env")
@@ -88,11 +86,14 @@ app.get("/protegido", autenticar, (req, res) => {
   res.json({ mensagem: "Acedeste a uma rota protegida!" });
 });
 
-app.get("/crypto/:symbol", async (req, res) => {
-    const { symbol } = req.params
-    const preco = await cryptoProvider.getPrice(symbol)
-    res.json({ symbol, preco })
-})
+function criarRotaCrypto(provider: CryptoProvider) {
+    app.get("/crypto/:symbol", async (req, res) => {
+        const preco = await provider.getPrice(req.params.symbol)
+        res.json({ symbol: req.params.symbol, preco })
+    })
+}
+
+criarRotaCrypto(new CoinGeckoProvider())
 
 app.listen(3000, () => {
   console.log("Servidor rodando na porta 3000");
