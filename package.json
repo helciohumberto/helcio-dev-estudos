@@ -5,7 +5,7 @@
   "main": "dia04.js",
   "scripts": {
     "start": "ts-node dia04.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -22,11 +22,13 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.9.2",
     "@types/node-fetch": "^2.6.13",
+    "jest": "^30.4.2",
     "npx": "^10.2.2",
-    
+    "ts-jest": "^29.4.11",
     "tsc": "^2.0.4"
   },
   "dependencies": {
