@@ -57,3 +57,19 @@ function palindromo(str: string): boolean {
 console.log(palindromo("racecar"))  // true
 console.log(palindromo("hello"))    // false
 console.log(palindromo("level"))    // true
+
+
+function removerDuplicados(nums: number[]): number[] {
+    const resultado: number[] = []
+    
+    for (const num of nums) {
+        if (!resultado.includes(num)) {
+            resultado.push(num)
+        }
+    }
+    
+    return resultado
+}
+
+console.log(removerDuplicados([1, 2, 2, 3, 4, 4, 5]))
+console.log(removerDuplicados([1, 1, 1, 1]))
