@@ -47,3 +47,13 @@ function contarLetras(str: string): Record<string, number> {
 }
 
 console.log(contarLetras("banana"))
+console.log(contarLetras("humberto"))
+
+function palindromo(str: string): boolean {
+    const invertida = str.split("").reverse().join("")
+    return str === invertida
+}
+
+console.log(palindromo("racecar"))  // true
+console.log(palindromo("hello"))    // false
+console.log(palindromo("level"))    // true
