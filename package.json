@@ -4,9 +4,9 @@
   "description": "",
   "main": "dia04.js",
   "scripts": {
-    "start": "ts-node dia04.ts",
+    "start": "ts-node src/server.ts",
     "test": "jest"
-  },
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/helciohumberto/helcio-dev-estudos.git"

@@ -4,16 +4,16 @@ import jwt from "jsonwebtoken";
 import cors from "cors";
 import { Request, Response, NextFunction } from "express";
 import "dotenv/config";
-import { CryptoProvider } from "./CryptoProvider"
-import { CoinGeckoProvider } from "./CoinGeckoProvider"
-import { UtilizadorRepository } from "./UtilizadorRepository"
+import { CryptoProvider } from "./CryptoProvider";
+import { CoinGeckoProvider } from "./CoinGeckoProvider";
+import { UtilizadorRepository } from "./UtilizadorRepository";
 
 if (!process.env.JWT_SECRET) {
-  throw new Error("JWT_SECRET não está definido no .env")
+  throw new Error("JWT_SECRET não está definido no .env");
 }
 
-const JWT_SECRET = process.env.JWT_SECRET
-const utilizadorRepo = new UtilizadorRepository()
+const JWT_SECRET = process.env.JWT_SECRET;
+const utilizadorRepo = new UtilizadorRepository();
 
 declare global {
   namespace Express {
@@ -36,17 +36,16 @@ app.use((req, res, next) => {
 function erroCredenciaisInvalidas(res: Response) {
   return res.status(401).json({ erro: "Credenciais inválidas" });
 }
+app.post("/register", async (req, res) => {
+  const { email, password } = req.body;
+  await utilizadorRepo.criar(email, password);
+  res.json({ mensagem: "Utilizador criado com sucesso" });
+});
 
-  app.post("/register", async (req, res) => {
-    const {email, password} = req.body;
-    await utilizadorRepo.criar(email, password)
-    res.json({ mensagem: "Utilizador criado com sucesso" });
-  });
-  
-  app.post("/auth", async (req, res) => {
-    const { email, password } = req.body;
-    const utilizador = await utilizadorRepo.buscarPorEmail(email)
-    if (!utilizador) {
+app.post("/auth", async (req, res) => {
+  const { email, password } = req.body;
+  const utilizador = await utilizadorRepo.buscarPorEmail(email);
+  if (!utilizador) {
     return erroCredenciaisInvalidas(res);
   }
   const passwordValida = await bcrypt.compare(password, utilizador.password);
@@ -78,13 +77,13 @@ app.get("/protegido", autenticar, (req, res) => {
 });
 
 function criarRotaCrypto(provider: CryptoProvider) {
-    app.get("/crypto/:symbol", async (req, res) => {
-        const preco = await provider.getPrice(req.params.symbol)
-        res.json({ symbol: req.params.symbol, preco })
-    })
+  app.get("/crypto/:symbol", async (req, res) => {
+    const preco = await provider.getPrice(req.params.symbol);
+    res.json({ symbol: req.params.symbol, preco });
+  });
 }
 
-criarRotaCrypto(new CoinGeckoProvider())
+criarRotaCrypto(new CoinGeckoProvider());
 
 app.listen(3000, () => {
   console.log("Servidor rodando na porta 3000");
