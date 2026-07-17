@@ -3,6 +3,7 @@ import Login from "./Login";
 import Dashboard from "./Dashboard";
 import PrivateRoute from "./PrivateRoute";
 import { AuthProvider } from "./AuthContext";
+import BtcChart from "./BtcChart";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route element={<PrivateRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>
+          <Route path="/btc" element={<BtcChart />}/>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
