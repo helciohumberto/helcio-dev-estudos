@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node src/server.ts",
     "test": "jest"
-},
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/helciohumberto/helcio-dev-estudos.git"
@@ -26,6 +26,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.9.2",
     "@types/node-fetch": "^2.6.13",
+    "@types/ws": "^8.18.1",
     "jest": "^30.4.2",
     "npx": "^10.2.2",
     "ts-jest": "^29.4.11",
@@ -40,6 +41,7 @@
     "jsonwebtoken": "^9.0.3",
     "node-fetch": "^3.3.2",
     "ts-node": "^10.9.2",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "ws": "^8.21.1"
   }
 }

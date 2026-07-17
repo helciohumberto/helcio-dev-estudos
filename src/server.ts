@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from "express"
 import authRoutes from "./routes/authRoutes"
 import cryptoRoutes from "./routes/cryptoRoutes"
 import { JwtUtil } from "./infrastructure/JwtUtil"
+import btcRoutes from "./routes/btcRoutes"
 
 if (!process.env.JWT_SECRET) {
     throw new Error("JWT_SECRET não está definido no .env")
@@ -28,6 +29,8 @@ app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`)
     next()
 })
+
+app.use("/btc", btcRoutes)
 
 function autenticar(req: Request, res: Response, next: NextFunction) {
     const token = req.headers.authorization?.split(" ")[1]
