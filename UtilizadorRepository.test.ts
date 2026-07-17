@@ -1,4 +1,4 @@
-import { UtilizadorRepository } from "./UtilizadorRepository"
+import { UtilizadorRepository } from "./src/infrastructure/UtilizadorRepository"
 
 describe("UtilizadorRepository", () => {
     let repo: UtilizadorRepository
